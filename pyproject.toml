@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "shopping-assistant-crewai"
+version = "0.1.0"
+description = "CrewAI shopping assistant skeleton"
+requires-python = ">=3.10"
+dependencies = [
+  "crewai>=0.80.0",
+  "crewai-tools>=0.14.0",
+  "pydantic>=2.6.0",
+  "pydantic-settings>=2.2.0",
+  "python-dotenv>=1.0.1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0.0",
+  "ruff>=0.4.0",
+  "mypy>=1.10.0",
+  "types-requests>=2.32.0.20240712",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100

@@ -1,0 +1,51 @@
+plan_task:
+  description: >
+    Given the user query "{query}", create a shopping plan:
+    - interpret the intent (what is the product category)
+    - list must-haves and nice-to-haves from inputs
+    - propose 3-6 evaluation criteria to judge products
+    Output as a short bullet list plus a structured section "Constraints" and "Criteria".
+  expected_output: >
+    A shopping plan with Constraints and Criteria sections.
+  agent: planner
+
+research_task:
+  description: >
+    Using the shopping plan, find 10-20 candidate products for "{query}".
+        Prefer calling the tool **Google Shopping Candidates (Serper)** to gather product+price listings.
+    Include a mix of reputable brands and value options.
+    For each candidate, capture:
+    - name/title
+    - approximate price (if available)
+    - key specs/features relevant to the criteria
+    - at least one source link
+    Use web search tools when available.
+  expected_output: >
+    A candidate list (10-20) with structured fields and links.
+  agent: researcher
+  context:
+    - plan_task
+
+compare_task:
+  description: >
+    Compare the candidates against Constraints and Criteria.
+    Identify top 5 and explain why each ranks highly.
+    Call out tradeoffs (price vs features, etc.) and any uncertainty.
+  expected_output: >
+    A ranked shortlist of 5 with clear tradeoffs and links.
+  agent: comparer
+  context:
+    - research_task
+
+finalize_task:
+  description: >
+    Produce the final answer:
+    - Provide top 3-5 recommendations
+    - Include a brief summary and practical buying guidance (non-age-restricted)
+    - Ask up to 3 follow-up questions ONLY if needed to decide between close options
+    Keep it concise and helpful.
+  expected_output: >
+    A final recommendation in clean markdown with bullets and clear tradeoffs.
+  agent: final_advisor
+  context:
+    - compare_task
